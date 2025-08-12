@@ -1,0 +1,7 @@
+export default class CropTool {
+  constructor(ctx){ this.layers=ctx.layers; this.canvas=ctx.canvas; this.start=null; this.end=null; this.history=ctx.history; }
+  onPointerDown(x,y){ this.start={x,y}; this.end={x,y}; }
+  onPointerMove(x,y){ if(!this.canvas.pointer.down) return; this.end={x,y}; this.canvas.requestRender(); }
+  onPointerUp(){ const x=Math.min(this.start.x,this.end.x)|0, y=Math.min(this.start.y,this.end.y)|0, w=(Math.abs(this.end.x-this.start.x)|0)||1, h=(Math.abs(this.end.y-this.start.y)|0)||1; this.layers.width=w; this.layers.height=h; this.layers.list.forEach(l=>{ const img=l.ctx.getImageData(x,y,w,h); l.canvas.width=w; l.canvas.height=h; l.ctx=l.canvas.getContext('2d'); l.ctx.putImageData(img,0,0); }); this.canvas.requestRender(); this.history.push(this.layers.serialize(), 'Crop'); }
+  drawOverlay(){ if(!this.start||!this.end) return; const sv=this.canvas.canvasToView(this.start.x,this.start.y); const ev=this.canvas.canvasToView(this.end.x,this.end.y); const x=Math.min(sv.x,ev.x), y=Math.min(sv.y,ev.y), w=Math.abs(ev.x-sv.x), h=Math.abs(ev.y-sv.y); const dc=this.canvas.canvas; const g=dc.getContext('2d'); g.save(); g.strokeStyle='#f59e0b'; g.setLineDash([4,4]); g.strokeRect(x,y,w,h); g.restore(); }
+}

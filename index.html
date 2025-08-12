@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Web Pro Editor</title>
+    <meta name="theme-color" content="#111318" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div id="app" class="app">
+      <header class="topbar" role="menubar" aria-label="Main Menu">
+        <nav class="menu">
+          <button class="menu-item" data-menu="file">File</button>
+          <button class="menu-item" data-menu="edit">Edit</button>
+          <button class="menu-item" data-menu="image">Image</button>
+          <button class="menu-item" data-menu="layer">Layer</button>
+          <button class="menu-item" data-menu="select">Select</button>
+          <button class="menu-item" data-menu="filter">Filter</button>
+          <button class="menu-item" data-menu="view">View</button>
+          <button class="menu-item" data-menu="ai">AI Tools</button>
+          <button class="menu-item" data-menu="window">Window</button>
+          <button class="menu-item" data-menu="help">Help</button>
+        </nav>
+        <div class="toolbar-quick">
+          <input id="file-input" type="file" accept="image/*,.json,.svg" hidden />
+          <button id="open-file">Open</button>
+          <button id="save-file">Save</button>
+          <div class="spacer"></div>
+          <div class="color-controls">
+            <input id="primary-color" type="color" value="#ff5722" />
+            <input id="secondary-color" type="color" value="#222222" />
+          </div>
+          <div class="brush-controls">
+            <label>Size <input id="brush-size" type="range" min="1" max="200" value="20" /></label>
+            <label>Hardness <input id="brush-hardness" type="range" min="0" max="1" value="0.8" step="0.01" /></label>
+            <label>Opacity <input id="brush-opacity" type="range" min="0.01" max="1" value="1" step="0.01" /></label>
+          </div>
+          <div class="zoom-controls">
+            <button data-zoom="out">-</button>
+            <span id="zoom-level">100%</span>
+            <button data-zoom="in">+</button>
+          </div>
+        </div>
+      </header>
+
+      <div class="workspace">
+        <aside class="left-toolbar" aria-label="Tools">
+          <div id="tools-list" class="tools-list" role="toolbar"></div>
+        </aside>
+
+        <main class="canvas-area" id="canvas-area">
+          <div id="rulers" class="rulers">
+            <canvas id="ruler-top" height="24"></canvas>
+            <canvas id="ruler-left" width="24"></canvas>
+          </div>
+          <div id="canvas-wrapper" class="canvas-wrapper" tabindex="0">
+            <canvas id="display-canvas"></canvas>
+            <div id="overlay" class="overlay"></div>
+          </div>
+        </main>
+
+        <aside class="right-panels">
+          <section class="panel" id="layers-panel" aria-label="Layers">
+            <header>Layers</header>
+            <div class="panel-content">
+              <ul id="layers-list" class="layers-list"></ul>
+              <div class="layer-actions">
+                <button data-action="new-layer">New</button>
+                <button data-action="delete-layer">Delete</button>
+                <button data-action="duplicate-layer">Duplicate</button>
+                <select id="blend-mode">
+                  <option value="source-over">Normal</option>
+                  <option value="multiply">Multiply</option>
+                  <option value="screen">Screen</option>
+                  <option value="overlay">Overlay</option>
+                  <option value="darken">Darken</option>
+                  <option value="lighten">Lighten</option>
+                  <option value="color-dodge">Color Dodge</option>
+                  <option value="color-burn">Color Burn</option>
+                  <option value="hard-light">Hard Light</option>
+                  <option value="soft-light">Soft Light</option>
+                  <option value="difference">Difference</option>
+                  <option value="exclusion">Exclusion</option>
+                  <option value="hue">Hue</option>
+                  <option value="saturation">Saturation</option>
+                  <option value="color">Color</option>
+                  <option value="luminosity">Luminosity</option>
+                </select>
+              </div>
+            </div>
+          </section>
+          <section class="panel" id="history-panel" aria-label="History">
+            <header>History</header>
+            <div class="panel-content">
+              <ol id="history-list" class="history-list"></ol>
+            </div>
+          </section>
+          <section class="panel" id="channels-panel" aria-label="Channels">
+            <header>Channels</header>
+            <div class="panel-content">
+              <label><input type="checkbox" checked /> RGB</label>
+              <label><input type="checkbox" checked /> R</label>
+              <label><input type="checkbox" checked /> G</label>
+              <label><input type="checkbox" checked /> B</label>
+            </div>
+          </section>
+          <section class="panel" id="paths-panel" aria-label="Paths">
+            <header>Paths</header>
+            <div class="panel-content">
+              <ul id="paths-list"></ul>
+              <button disabled>New Path</button>
+            </div>
+          </section>
+          <section class="panel" id="props-panel" aria-label="Properties">
+            <header>Properties</header>
+            <div id="properties" class="panel-content"></div>
+          </section>
+          <section class="panel" id="adjustments-panel" aria-label="Adjustments">
+            <header>Adjustments</header>
+            <div class="panel-content">
+              <button data-filter="brightness-contrast">Brightness/Contrast</button>
+              <button data-filter="hue-saturation">Hue/Saturation</button>
+              <button data-filter="blur">Gaussian Blur</button>
+              <button data-filter="sharpen">Sharpen</button>
+            </div>
+          </section>
+          <section class="panel" id="swatches-panel" aria-label="Swatches">
+            <header>Swatches</header>
+            <div id="swatches" class="panel-content" style="display:grid;grid-template-columns:repeat(8,1fr);gap:6px"></div>
+          </section>
+          <section class="panel" id="gradients-panel" aria-label="Gradients">
+            <header>Gradients</header>
+            <div class="panel-content"><small>Coming soon</small></div>
+          </section>
+          <section class="panel" id="styles-panel" aria-label="Styles">
+            <header>Styles</header>
+            <div class="panel-content"><small>Coming soon</small></div>
+          </section>
+          <section class="panel" id="ai-panel" aria-label="AI Assist">
+            <header>AI Assist</header>
+            <div class="panel-content">
+              <button data-ai="bg-remove">Background Removal</button>
+              <button data-ai="inpaint">Object Removal (Inpaint)</button>
+              <div class="text2img">
+                <input id="prompt" placeholder="Text to Image prompt" />
+                <button data-ai="text2img">Generate</button>
+              </div>
+            </div>
+          </section>
+        </aside>
+      </div>
+
+      <footer class="timeline" id="timeline" aria-label="Animation Timeline">
+        <div class="timeline-toolbar">
+          <button data-timeline="add-frame">Add Frame</button>
+          <button data-timeline="duplicate-frame">Duplicate</button>
+          <button data-timeline="delete-frame">Delete</button>
+          <button data-timeline="play">Play</button>
+        </div>
+        <div class="frames" id="frames"></div>
+      </footer>
+
+      <input id="file-drop-helper" type="file" accept="image/*,.json,.svg" multiple hidden />
+    </div>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

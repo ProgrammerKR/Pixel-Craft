@@ -1,0 +1,58 @@
+:root{--bg:#111318;--panel:#161921;--panel-2:#1b1f2a;--text:#e6e9ef;--muted:#9aa4b2;--accent:#4cc9f0;--accent-2:#a78bfa;--danger:#ef4444;--ok:#10b981;--border:#232838;--toolbar:#0e1117;--shadow:0 4px 16px rgba(0,0,0,.3)}
+*{box-sizing:border-box}
+html,body,#app{height:100%}
+body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);}
+button,input,select{font:inherit;color:inherit}
+button{background:var(--panel-2);border:1px solid var(--border);color:var(--text);padding:.4rem .6rem;border-radius:6px;cursor:pointer}
+button:hover{background:#222738}
+.menu{display:flex;gap:.5rem}
+.topbar{position:sticky;top:0;z-index:20;display:flex;flex-direction:column;background:var(--toolbar);border-bottom:1px solid var(--border);box-shadow:var(--shadow)}
+.menu-item{background:transparent;border:0;padding:.75rem .6rem;color:var(--muted)}
+.menu-item:hover,.menu-item[aria-expanded="true"]{color:var(--text);background:var(--panel)}
+.toolbar-quick{display:flex;align-items:center;gap:.5rem;padding:.4rem;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.toolbar-quick .spacer{flex:1}
+.color-controls{display:flex;gap:.25rem}
+.brush-controls{display:flex;gap:.5rem;align-items:center}
+.zoom-controls{display:flex;gap:.5rem;align-items:center}
+
+.workspace{display:grid;grid-template-columns:64px 1fr 320px;grid-template-rows:1fr;gap:0;height:calc(100% - 140px)}
+.left-toolbar{background:var(--panel);border-right:1px solid var(--border);overflow:auto}
+.right-panels{background:var(--panel);border-left:1px solid var(--border);overflow:auto;display:flex;flex-direction:column;gap:.5rem;padding:.5rem}
+.panel{background:var(--panel-2);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.panel header{padding:.5rem .75rem;border-bottom:1px solid var(--border);font-weight:600;background:linear-gradient(180deg,rgba(255,255,255,.03),transparent)}
+.panel .panel-content{padding:.5rem .75rem}
+.layers-list,.history-list{list-style:none;margin:0;padding:0}
+.layers-list li{display:flex;align-items:center;justify-content:space-between;gap:.5rem;padding:.3rem;border-bottom:1px dashed var(--border)}
+.layers-list li.active{background:#202637}
+.layer-actions{display:flex;gap:.5rem;align-items:center;padding-top:.5rem}
+
+.canvas-area{position:relative;background:#0b0d12}
+.rulers{position:absolute;top:0;left:0;z-index:5;pointer-events:none}
+#ruler-top{position:absolute;left:24px;top:0;width:calc(100% - 24px);background:#0b0d12;border-bottom:1px solid var(--border)}
+#ruler-left{position:absolute;left:0;top:24px;height:calc(100% - 24px);background:#0b0d12;border-right:1px solid var(--border)}
+.canvas-wrapper{position:absolute;inset:24px 0 0 24px;overflow:auto;outline:none}
+#display-canvas{background:repeating-conic-gradient(#222 0% 25%, #1a1a1a 0% 50%) 50%/20px 20px;box-shadow:0 4px 40px rgba(0,0,0,.5);margin:2rem;border:1px solid #000}
+.overlay{position:absolute;inset:0;pointer-events:none}
+.tools-list{display:grid;grid-template-columns:1fr;gap:.25rem;padding:.5rem}
+.tools-list .tool{display:flex;align-items:center;justify-content:center;aspect-ratio:1;border-radius:8px;border:1px solid var(--border);background:var(--panel-2);cursor:pointer}
+.tools-list .tool.active{outline:2px solid var(--accent)}
+.tools-list svg{width:22px;height:22px;fill:currentColor;color:#cbd5e1}
+
+.timeline{position:sticky;bottom:0;background:var(--toolbar);border-top:1px solid var(--border);padding:.5rem;display:flex;flex-direction:column;gap:.5rem}
+.timeline-toolbar{display:flex;gap:.5rem}
+.frames{display:flex;gap:.5rem;overflow:auto}
+.frames .frame{width:64px;height:48px;background:#10131a;border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.frames .frame.active{outline:2px solid var(--accent-2)}
+
+@media (max-width: 1200px){
+  .workspace{grid-template-columns:48px 1fr 280px}
+}
+@media (max-width: 900px){
+  .workspace{grid-template-columns:48px 1fr}
+  .right-panels{position:fixed;right:0;top:56px;bottom:96px;width:320px;transform:translateX(100%);transition:transform .2s ease}
+  .right-panels.open{transform:translateX(0)}
+}
+@media (max-width: 640px){
+  .menu{display:none}
+  .toolbar-quick{flex-wrap:wrap}
+}

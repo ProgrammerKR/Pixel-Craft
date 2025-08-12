@@ -1,0 +1,9 @@
+{
+  "name": "Web Pro Editor",
+  "short_name": "ProEditor",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#111318",
+  "theme_color": "#111318",
+  "icons": []
+}
