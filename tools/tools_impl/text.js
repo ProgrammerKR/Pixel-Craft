@@ -1,0 +1,4 @@
+export default class TextTool {
+  constructor(ctx){ this.layers=ctx.layers; this.canvas=ctx.canvas; this.state=ctx.state; this.history=ctx.history; this.font='24px Inter,sans-serif'; this.align='left'; this.baseline='alphabetic'; this.fill='#ffffff'; }
+  onPointerDown(x,y){ const text = prompt('Enter text:','Sample Text'); if(!text) return; const act=this.layers.getActive(); if(!act) return; act.ctx.save(); act.ctx.font=this.font; act.ctx.textAlign=this.align; act.ctx.textBaseline=this.baseline; act.ctx.fillStyle=this.state.primaryColor||this.fill; act.ctx.fillText(text, x, y); act.ctx.restore(); this.canvas.requestRender(); this.history.push(this.layers.serialize(), 'Text'); }
+}

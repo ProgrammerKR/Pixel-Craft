@@ -1,0 +1,7 @@
+export default class PaintBucketTool {
+  constructor(ctx){ this.layers=ctx.layers; this.canvas=ctx.canvas; this.state=ctx.state; this.history=ctx.history; this.tolerance=32; }
+  onPointerDown(x,y){ const act=this.layers.getActive(); if(!act) return; const img=act.ctx.getImageData(0,0,this.layers.width,this.layers.height); const data=img.data; const sx=Math.floor(x), sy=Math.floor(y); const idx=(sy*this.layers.width+sx)*4; const sr=data[idx], sg=data[idx+1], sb=data[idx+2], sa=data[idx+3]; const fillColor=hexToRgb(this.state.primaryColor); const tol=this.tolerance; const q=[[sx,sy]]; const vis=new Uint8Array(this.layers.width*this.layers.height); while(q.length){ const [cx,cy]=q.pop(); if(cx<0||cy<0||cx>=this.layers.width||cy>=this.layers.height) continue; const ci=(cy*this.layers.width+cx); if(vis[ci]) continue; vis[ci]=1; const di=ci*4; const dr=data[di], dg=data[di+1], db=data[di+2], da=data[di+3]; if(Math.abs(dr-sr)<=tol&&Math.abs(dg-sg)<=tol&&Math.abs(db-sb)<=tol&&Math.abs(da-sa)<=tol){ data[di]=fillColor.r; data[di+1]=fillColor.g; data[di+2]=fillColor.b; data[di+3]=255; q.push([cx+1,cy],[cx-1,cy],[cx,cy+1],[cx,cy-1]); }
+  }
+  act.ctx.putImageData(img,0,0); this.canvas.requestRender(); this.history.push(this.layers.serialize(), 'Paint Bucket'); }
+}
+function hexToRgb(hex){ const v=hex.replace('#',''); const n=parseInt(v,16); return { r:(n>>16)&255, g:(n>>8)&255, b:n&255 }; }
